@@ -1,0 +1,22 @@
+int ninjaTraining(int n, vector<vector<int>> &points){
+    // Write your code here.
+    vector<int> curr(4,-1);
+    vector<int> prev(4,-1);
+    prev[0] = max(points[0][1],points[0][2]);
+    prev[1] = max(points[0][0],points[0][2]);
+    prev[2] = max(points[0][0],points[0][1]);
+    prev[3] = max(prev[0],points[0][0]);
+    for(int j = 1; j<n; j++){
+        for(int k = 0;k<4;k++){
+            int maxi = 0;
+            for(int i = 0;i<3;i++){
+                if(i!=k){
+                    maxi = max(maxi,points[j][i] + prev[i]);
+                }
+            } 
+            curr[k] = maxi;
+        }
+        prev = curr;
+    }
+    return prev[3];
+}
