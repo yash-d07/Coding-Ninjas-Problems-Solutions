@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+int solution(int index, int target, vector<int> &array, vector<vector<int>> &dp)
+{
+    if(index ==0){
+        if(target == 0 && array[0] == 0) return 2;
+        if(target == 0 || target == array[0]) return 1;
+        return 0;
+    }
+    if(dp[index][target]!=-1) return dp[index][target];
+    int nottake = solution(index-1,target,array,dp);
+    int take = 0;
+    if(array[index]<=target)
+    {
+        take = solution(index-1,target - array[index],array,dp);
+    }  
+    return dp[index][target] = take+nottake;
+}
+
+int findWays(vector<int> &num, int tar)
+{
+    int n = num.size();
+    vector<vector<int>> dp(n,vector<int>(tar+1,-1));
+    return solution(n-1,tar,num,dp);
+}
