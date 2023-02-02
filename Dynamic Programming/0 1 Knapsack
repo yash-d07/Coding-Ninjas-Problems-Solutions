@@ -1,0 +1,20 @@
+#include <bits/stdc++.h> 
+int knapsack(vector<int> wt, vector<int> val, int n, int maxwt) 
+{
+    vector<int> prev(maxwt + 1, 0);
+    
+    for(int i = wt[0]; i<= maxwt;i++){
+        prev[i] = val[0];
+    }
+    for(int i = 1; i<n; i++){
+        for(int w = maxwt; w>=0; w-- ){
+            int notpick = 0 + prev[w];
+            int pick = 0;
+            if(wt[i]<=w){
+                pick = val[i] + prev[w - wt[i]];
+                }
+            prev[w] = max(pick,notpick);
+            }
+    }
+    return prev[maxwt];
+}
