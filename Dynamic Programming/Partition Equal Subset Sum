@@ -1,0 +1,30 @@
+#include <bits/stdc++.h> 
+bool solution(int index, int target, vector<int> &array, vector<vector<int>> &dp)
+{
+    if(target==0) return true;
+    if(index==0) return (array[0]==target);
+    if(dp[index][target]!=-1) return dp[index][target];
+    bool nottake = solution(index-1,target,array,dp);
+    bool take = false;
+    if(array[index]<=target)
+    {
+        take = solution(index-1,target - array[index],array,dp);
+    }  
+    return dp[index][target] = take|nottake;
+}
+
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+    vector<vector<int>> dp(n,vector<int>(k+1,-1));
+    return solution(n-1,k,arr,dp);
+}
+
+bool canPartition(vector<int> &arr, int n)
+{
+    int tsum = 0;
+   for(int i=0;i<n;i++) tsum+=arr[i];
+    
+    if(tsum%2) return false;
+    int target = tsum/2;
+    
+    return subsetSumToK(n,target,arr);
+}
