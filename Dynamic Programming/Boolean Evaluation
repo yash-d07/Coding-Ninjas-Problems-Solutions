@@ -1,0 +1,56 @@
+#include <bits/stdc++.h> 
+using namespace std;
+
+int mod = 1000000007;
+int solution(string &exp, int i, int j, int isTrue,
+vector<vector<vector<int>>> &dp)
+{
+    long long ways = 0;
+
+    if(i>j) return 0;
+
+    if(i == j)
+    {
+        if (isTrue == 1) return exp[i] == 'T';
+        else return exp[i] == 'F';
+    }
+    
+    if(dp[i][j][isTrue] != -1) return dp[i][j][isTrue];
+
+    for(int ind=i+1; ind<=j-1;ind=ind+2)
+    {
+     
+    long long leftT = solution(exp, i,ind-1,1,dp);
+    long long rightT = solution(exp, ind+1,j,1,dp);
+    long long leftF = solution(exp, i,ind-1,0,dp);
+    long long rightF = solution(exp, ind+1,j,0,dp);
+
+      if(exp[ind] == '&')
+      {
+       if (isTrue) ways = (ways + (leftT*rightT)%mod)%mod;
+       else ways = (ways + (leftF * rightF)%mod + (leftF * rightT)%mod 
+       + (leftT * rightF)%mod)%mod;
+      }
+
+      else if(exp[ind] == '|')
+      {
+         if (isTrue) ways = (ways + (leftT*rightT)%mod + (leftF*rightT)%mod 
+       + (leftT * rightF)%mod)%mod;
+       else ways = (ways + (leftF * rightF)%mod)%mod; 
+      }
+
+      else if(exp[ind] == '^')
+      {
+         if (isTrue) ways = (ways + (leftF*rightT)%mod 
+       + (leftT * rightF)%mod)%mod;
+       else ways = (ways + (leftF * rightF)%mod + (leftT*rightT)%mod)%mod; 
+      }
+    }
+    return dp[i][j][isTrue] = ways;
+}
+
+int evaluateExp(string & exp) {
+    int n = exp.size();
+    vector<vector<vector<int>>> dp(n,vector<vector<int>> (n,vector<int> (2,-1)));
+    return solution(exp,0,n-1,1,dp);
+}
