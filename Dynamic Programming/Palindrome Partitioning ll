@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+
+bool isPalindrome(int start, int end, string &str)
+{
+    while(start<=end)
+    {
+        if(str[start++] != str[end--]) return false;
+    }
+    return true;
+}
+
+int palindromePartitioning(string str) {
+
+   int n = str.size();
+   vector<int> dp(n+1,0);
+   dp[n] = 0;
+
+   for(int i=n-1; i>=0; i--)
+   {
+       int mini = INT_MAX;
+       for(int ind=i; ind<str.size(); ind++)
+        {
+            if(isPalindrome(i,ind,str)) {
+            int cost = 1 + dp[ind+1];
+            mini = min(cost,mini);
+            }
+        }
+        dp[i] = mini;
+    }
+
+   return dp[0] - 1;    
+}
